@@ -1,11 +1,12 @@
 ENTRY(_start)
 SECTIONS
 {
-	. = 0x00010000;  /* QEMU versatilepb start address */
+	. = 0x00000000;  /* QEMU versatilepb start address */
 	.text : { 
 		boot.o (interrupt_vector)
 		*(.text)
 	}
+	isr_end = .;
 	.data : { *(.data) }
 	.bss : { *(.bss COMMON) }
 	. = ALIGN(8);
