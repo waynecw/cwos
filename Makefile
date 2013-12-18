@@ -16,7 +16,7 @@ ASFLAGS := -mcpu=arm926ej-s -g
 LDSCRIPT := cwos.ld
 
 QEMU := qemu-system-arm
-QEMU_FLAGS := -nographic -M $(TARGET) -m 64M -kernel $(OS).img -gdb tcp::26000 -serial mon:stdio
+QEMU_FLAGS := -nographic -M $(TARGET) -m 128M -kernel $(OS).img -gdb tcp::26000 -serial mon:stdio
 
 OBJS := boot.o cwos.o 
 
