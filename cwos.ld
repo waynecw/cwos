@@ -3,13 +3,38 @@ SECTIONS
 {
 	. = 0x00000000;  /* QEMU versatilepb start address */
 	.text : { 
+		_text = .;
 		boot.o (interrupt_vector)
 		*(.text)
+		_etext = .;
 	}
-	isr_end = .;
-	.data : { *(.data) }
-	.bss : { *(.bss COMMON) }
-	. = ALIGN(8);
-	. = . + 0x1000;
+
+	.rodata : {
+		_rodata = .;
+		*(.rodata)
+		_erodata = .;
+	}
+
+	.data : { 
+		_data = .;
+		*(.data) 
+		_edata = .;
+	}
+	.bss : {
+		_bss = .;
+		*(.bss)
+		*(COMMON)
+		_ebss = .;
+	} 
+
+	. = ALIGN(0x1000);
+
 	kernel_stack_top = .;
+	. += 0x1000;
+	kernel_stack_start = .;
+	kernel_mem : {
+		kernel_mem_start = .;
+		. += ALIGN(0x100000);
+		kernel_mem_end = .;
+	} 
 }

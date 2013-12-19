@@ -19,7 +19,7 @@ reset_handler:
 
 relocation:
 	ldr r2, =_start
-	ldr r3, =isr_end
+	ldr r3, =_ebss
 	sub r2, r3, r2
 	add r2, r0, r2
 
@@ -31,5 +31,5 @@ relocation_loop:
 	ldr pc, =0
 
 setup_stack:
-	ldr sp, =kernel_stack_top
+	ldr sp, =kernel_stack_start
 	bl cwos_boot 
