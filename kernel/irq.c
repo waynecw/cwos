@@ -26,7 +26,21 @@ void handler_swi()
 
 void handler_irq()
 {
-	uart0_send("In ARM Core IRQ!\n");
+	volatile unsigned int *reg = (unsigned int *) PIC_IRQ_STATUS;
 
+	switch (*reg) {
+		case PIC_UART0_BIT:
+			uart0_send("UART!\n");
+			uart0_irq_handler();
+		break;
 
+	}
+
+	__asm__ __volatile__ (
+		"mrs r0, cpsr\n"
+		"bic r0, r0, #0x1F\n"
+		"orr r0, r0, #0x12\n" // enter SVC mode
+		"msr cpsr, r0\n"
+		"subs pc, lr, #4\n"
+	);
 }
