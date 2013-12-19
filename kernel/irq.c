@@ -4,7 +4,7 @@ void irq_enable()
 {
 	__asm__ __volatile__ (
 		"mrs r0, cpsr\n"
-		"bic r0, #0xc0\n"
+		"bic r0, r0, #0x80\n"
 		"msr cpsr, r0\n"
 	);
 }
@@ -21,9 +21,12 @@ void irq_disable()
 void handler_swi()
 {
 	uart0_send("In SWI!\n");
+	irq_enable();
 }
 
 void handler_irq()
 {
 	uart0_send("In ARM Core IRQ!\n");
+
+
 }

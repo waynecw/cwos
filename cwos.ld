@@ -32,6 +32,8 @@ SECTIONS
 	kernel_stack_top = .;
 	. += 0x1000;
 	kernel_stack_start = .;
+	. += 0x1000;
+	irq_stack_start = .;
 	kernel_mem : {
 		kernel_mem_start = .;
 		. += ALIGN(0x100000);

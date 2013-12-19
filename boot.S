@@ -31,9 +31,15 @@ relocation_loop:
 	ldr pc, =0
 
 setup_stack:
+	mrs r0, cpsr
+	/* enter IRQ mode */
+	bic r1, r0, #0x1F
+	orr r1, r1, #0x12  
+	msr cpsr, r1  
+	ldr sp, =irq_stack_start
+	/* enter SVC mode */
+	msr cpsr, r0
 	ldr sp, =kernel_stack_start
 	bl cwos_boot 
 
-/* _handler_swi: */
-	/* b handler_swi */
 

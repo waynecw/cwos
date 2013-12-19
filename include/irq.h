@@ -1,7 +1,13 @@
 #ifndef __IRQ__
 #define __IRQ__
 
-#define IRQ_COUNT	32
+#define IRQ_COUNT		32
+
+#define VIC_BASE		0x10140000
+#define PIC_BASE		( VIC_BASE + 0 )
+#define PIC_INT_ENABLE		( PIC_BASE + 0x10 )
+
+#define PIC_UART0_BIT		1 << 12
 
 
 #define trigger_swi() \
