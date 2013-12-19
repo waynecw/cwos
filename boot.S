@@ -1,17 +1,17 @@
-.code 32
+.arm
 .section interrupt_vector
 .global _start
 _start:
-	b reset_handler
+	b handler_reset
+	b .
+	b handler_swi
 	b .
 	b .
 	b .
-	b .
-	b .
-	b .
+	b handler_irq
 	b .
 
-reset_handler:
+handler_reset:
 	adr r0, _start
 	ldr r1, =0
 	cmp r0, r1
@@ -33,3 +33,7 @@ relocation_loop:
 setup_stack:
 	ldr sp, =kernel_stack_start
 	bl cwos_boot 
+
+/* _handler_swi: */
+	/* b handler_swi */
+
