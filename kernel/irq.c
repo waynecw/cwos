@@ -35,7 +35,7 @@ void handler_irq()
 		break;
 
 	}
-
+#if 0
 	__asm__ __volatile__ (
 		"mrs r0, cpsr\n"
 		"bic r0, r0, #0x1F\n"
@@ -43,4 +43,5 @@ void handler_irq()
 		"msr cpsr, r0\n"
 		"subs pc, lr, #4\n"
 	);
+#endif
 }

@@ -8,7 +8,7 @@ _start:
 	b .
 	b .
 	b .
-	b handler_irq
+	b _handler_irq
 	b .
 
 handler_reset:
@@ -41,5 +41,26 @@ setup_stack:
 	msr cpsr, r0
 	ldr sp, =kernel_stack_start
 	bl cwos_boot 
+
+_handler_irq:
+	sub lr, lr, #4 /* in IRQ mode */
+	push {r0-r2}
+	mov r0, r12
+	mov r1, lr
+	mov r2, sp
+	mrs r12, cpsr
+	bic r12, r12, #0x1F
+	orr r12, r12, #0x13  
+	msr cpsr, r12 /* enter SVC mode */
+	push {r0-r2}  /* push r12_irq, lr_irq, sp_irq */
+	bic r12, r12, #0x10
+	msr cpsr, r12 /* enter IRQ mode */
+	push {r0-r7}
+	bl handler_irq
+	pop {r0-r7}
+	mrs r12, spsr
+	msr cpsr, r12 /* enter SVC mode */
+	pop {r12, lr, sp}
+	mov pc, lr
 
 
