@@ -1,4 +1,13 @@
 #include <irq.h>
+#include <uart.h>
+
+void (*pl190_isr_vectors[IRQ_COUNT])(void) = 
+{
+	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	uart0_irq_handler,
+	0, 0, 0
+};
+
 
 void irq_enable()
 {
@@ -26,21 +35,12 @@ void handler_swi()
 
 void handler_irq()
 {
-	volatile unsigned int *reg = (unsigned int *) PIC_IRQ_STATUS;
+	unsigned int reg_irq_status = *((volatile unsigned int *) PIC_IRQ_STATUS);
+	int irq_n = 0;
 
-	switch (*reg) {
-		case PIC_UART0_BIT:
-			uart0_irq_handler();
-		break;
+	while (reg_irq_status >>= 1) 
+		irq_n++;
 
-	}
-#if 0
-	__asm__ __volatile__ (
-		"mrs r0, cpsr\n"
-		"bic r0, r0, #0x1F\n"
-		"orr r0, r0, #0x12\n" // enter SVC mode
-		"msr cpsr, r0\n"
-		"subs pc, lr, #4\n"
-	);
-#endif
+	pl190_isr_vectors[irq_n]();
+
 }
