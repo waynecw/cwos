@@ -65,6 +65,11 @@ void vprintfmt(void (*putch)(const char), const char *fmt, va_list *va)
 						base = 10;
 						printnum(putch, num, base);
 						break;
+
+					case 'x':
+						num = getuint(va);
+						base = 16;
+						printnum(putch, num, base);
 				}
 
 				break;

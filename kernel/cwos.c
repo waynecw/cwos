@@ -7,7 +7,7 @@ void cwos_boot()
 {
 	uart_init();
 
-	printk("Hello CWOS %d.%d World\n", 0, 1);
+	printk("Hello CWOS %d.%x World\n", 0, 0x1);
 	printk("Press any key to see echo: ");
 
 	irq_enable();
