@@ -26,7 +26,8 @@ Features
 * IRQ
 * Basic UART driver
 * Partial C-style string library implementation
-* Non-recursive make design
+* printk() support for debugging
+* Non-recursive Make design
 
 
 Install & Execute
