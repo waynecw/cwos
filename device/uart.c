@@ -1,4 +1,5 @@
 #include <irq.h>
+#include <uart.h>
 
 #define UART0_BASE		0x101F1000
 
