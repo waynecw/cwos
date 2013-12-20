@@ -50,7 +50,7 @@ static void uart0_recv()
 	char c[2];
 	c[0] = *reg_dr;
 
-	uart0_send(&c);
+	uart0_send(c);
 }
 
 void uart0_irq_handler()
