@@ -14,6 +14,7 @@
 #define UART0_TMIS		( UART0_BASE + 0x40 )
 #define UART0_ICR		( UART0_BASE + 0x44 )
 
+
 #define UART0_IMSC_RX_BIT	1 << 4
 
 void uart_init()
@@ -74,4 +75,13 @@ void uart0_send(const char *str)
 		*reg_dr = (unsigned char)(*str);
 		str++;
 	}
+}
+
+void uart0_putchar(const char c)
+{
+	volatile unsigned char *reg_fr = (volatile unsigned char *) UART0_FR;
+
+	while (*reg_fr & 0x2);
+	*((volatile char *) UART0_DR) = c;
+	while (*reg_fr & 0x2);
 }

@@ -25,7 +25,7 @@ include device/build.mk
 include kernel/build.mk
 
 $(OS): $(OBJS)
-	$(LD) -o $@.elf -T $(LDSCRIPT) $(OBJS)
+	$(CC) -o $@.elf -T $(LDSCRIPT) $(OBJS)
 	$(OBJDUMP) -D $@.elf > $@.asm
 	$(OBJCOPY) -O binary $@.elf $@.img
 	$(NM) $@.elf > $@.map

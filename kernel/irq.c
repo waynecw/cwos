@@ -29,7 +29,7 @@ void irq_disable()
 
 void handler_swi()
 {
-	uart0_send("In SWI!\n");
+	printk("In SWI!\n");
 	irq_enable();
 }
 
