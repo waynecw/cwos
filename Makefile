@@ -45,5 +45,5 @@ qemu-debug: $(OS)
 	$(AS) $(ASFLAGS) $< -o $@
 
 clean:
-	find . -name '*.o' -exec rm -f {} \;
+	rm -f $(OBJS)
 	rm -rf *.elf *.asm *.img *.map
