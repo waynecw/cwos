@@ -9,7 +9,6 @@ Environment
 * Target platform: QEMU emulated ARM Versatile Platform Board 
   - CPU: ARM 926EJ-S
   - Memory: 128 MB
-  - Boot from 0x10000 (qemu -kernel option)
 * Host environment
   - Verified host OS
       * Ubuntu 12.04 LTS x86
