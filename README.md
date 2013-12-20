@@ -22,6 +22,7 @@ Environment
 Features
 --------
 
+* Relocation at boot time
 * IRQ
 * Basic UART driver
 * Partial C-style string library implementation
