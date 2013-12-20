@@ -43,24 +43,29 @@ setup_stack:
 	bl cwos_boot 
 
 _handler_irq:
-	sub lr, lr, #4 /* in IRQ mode */
-	push {r0-r2}
-	mov r0, r12
-	mov r1, lr
-	mov r2, sp
-	mrs r12, cpsr
-	bic r12, r12, #0x1F
-	orr r12, r12, #0x13  
-	msr cpsr, r12 /* enter SVC mode */
-	push {r0-r2}  /* push r12_irq, lr_irq, sp_irq */
-	bic r12, r12, #0x10
-	msr cpsr, r12 /* enter IRQ mode */
-	push {r0-r7}
-	bl handler_irq
-	pop {r0-r7}
-	mrs r12, spsr
-	msr cpsr, r12 /* enter SVC mode */
-	pop {r12, lr, sp}
+	/* obtain return address in IRQ mode */
+	sub lr, lr, #4 
+
+	push {r0-r1}		
+	mov r0, lr			
+	mrs r1, cpsr	
+	bic r1, #0x1F
+	orr r1, #0x13		
+	msr cpsr, r1
+
+	/* enter SVC mode */
+	push {r0}	
+	bic r1, #0x1
+	msr cpsr, r1	
+
+	/* enter IRQ mode */
+	pop {r0-r1}			
+	push {r0-r4, r12}
+	bl handler_irq		
+	pop {r0-r4, r12}
+	mrs lr, spsr
+
+	/* enter SVC mode */
+	msr cpsr, lr		
+	pop {lr}
 	mov pc, lr
-
-

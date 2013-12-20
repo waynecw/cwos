@@ -45,7 +45,8 @@ void uart_init()
 static void uart0_recv()
 {
 	volatile char *reg_dr = (volatile char *) UART0_DR;
-	char c = *reg_dr;
+	char c[2];
+	c[0] = *reg_dr;
 
 	uart0_send(&c);
 }

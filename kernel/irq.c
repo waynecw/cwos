@@ -30,7 +30,6 @@ void handler_irq()
 
 	switch (*reg) {
 		case PIC_UART0_BIT:
-			uart0_send("UART!\n");
 			uart0_irq_handler();
 		break;
 
