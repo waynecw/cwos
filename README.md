@@ -3,6 +3,10 @@ cwos
 
 CWOS: A Tiny ARM-based OS 
 
+Function
+--------
+CWOS is still under development. Currently it can echo user's input through UART channel to demonstrate its IRQ handling mechanism and UART driver.
+
 Environment
 -----------
 
