@@ -1,5 +1,6 @@
 #include <irq.h>
 #include <uart.h>
+#include <types.h>
 
 void (*pl190_isr_vectors[IRQ_COUNT])(void) = 
 {
@@ -35,7 +36,7 @@ void handler_swi()
 
 void handler_irq()
 {
-	unsigned int reg_irq_status = *((volatile unsigned int *) PIC_IRQ_STATUS);
+	uint32_t reg_irq_status = *((volatile uint32_t *) PIC_IRQ_STATUS);
 	int irq_n = 0;
 
 	while (reg_irq_status >>= 1) 

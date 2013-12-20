@@ -1,14 +1,15 @@
 #include <uart.h>
 #include <stdarg.h>
+#include <types.h>
 
-static inline unsigned int getuint(va_list *va)
+static inline uint32_t getuint(va_list *va)
 {
-	return va_arg(*va, unsigned int);
+	return va_arg(*va, uint32_t);
 }
 
-static inline int getint(va_list *va)
+static inline int32_t getint(va_list *va)
 {
-	return va_arg(*va, int);
+	return va_arg(*va, int32_t);
 }
 
 
@@ -20,12 +21,12 @@ static inline void printdigit(void (*putch)(const char), int d)
 
 static inline void printnum(
 		void (*putch)(const char), 
-		unsigned long long num,
+		uint64_t num,
 		int base
 		)
 {
 	int d;
-	long long n = (long long) num;
+	int64_t n = (int64_t) num;
 
 	/* only supports 2 <= base <= 16 */
 	if (base < 2 || base > 16) {
@@ -58,9 +59,9 @@ void vprintfmt(void (*putch)(const char), const char *fmt, va_list *va)
 				switch (ch) {
 					case 'd':
 						num = getint(va);
-						if ((long long) num < 0) {
+						if ((int64_t) num < 0) {
 							putch('-');
-							num = (long long) num * -1;
+							num = (int64_t) num * -1;
 						}
 						base = 10;
 						printnum(putch, num, base);
