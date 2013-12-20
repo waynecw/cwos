@@ -22,7 +22,7 @@ Features
 --------
 
 * Relocation at boot time
-* IRQ
+* IRQ handling
 * Basic UART driver
 * Partial C-style string library implementation
 * printk() support for debugging
