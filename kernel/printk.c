@@ -15,7 +15,7 @@ static inline int32_t getint(va_list *va)
 
 static inline void printdigit(void (*putch)(const char), int d)
 {
-	const char *digits = "01234567789abcdef";
+	const char *digits = "0123456789abcdef";
 	putch(digits[d]);
 }
 

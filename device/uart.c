@@ -1,18 +1,20 @@
 #include <irq.h>
 #include <uart.h>
+#include <memory.h>
 
-#define UART0_BASE		0x101F1000
+//#define UART0_BASE		0x101F1000
+#define UART0_BASE  __iopa2va(0x101F1000)
 
-#define UART0_DR		( UART0_BASE + 0x0 )
-#define UART0_RSR		( UART0_BASE + 0x4 )
-#define UART0_FR		( UART0_BASE + 0x18 )
-#define UART0_IBRD		( UART0_BASE + 0x24 )
-#define UART0_FBRD		( UART0_BASE + 0x28 )
-#define UART0_LCR_H		( UART0_BASE + 0x2c )
-#define UART0_IMSC		( UART0_BASE + 0x38 )
-#define UART0_RIS		( UART0_BASE + 0x3c )
-#define UART0_TMIS		( UART0_BASE + 0x40 )
-#define UART0_ICR		( UART0_BASE + 0x44 )
+#define UART0_DR    ( UART0_BASE + 0x0 )
+#define UART0_RSR   ( UART0_BASE + 0x4 )
+#define UART0_FR    ( UART0_BASE + 0x18 )
+#define UART0_IBRD  ( UART0_BASE + 0x24 )
+#define UART0_FBRD  ( UART0_BASE + 0x28 )
+#define UART0_LCR_H ( UART0_BASE + 0x2c )
+#define UART0_IMSC  ( UART0_BASE + 0x38 )
+#define UART0_RIS   ( UART0_BASE + 0x3c )
+#define UART0_TMIS  ( UART0_BASE + 0x40 )
+#define UART0_ICR   ( UART0_BASE + 0x44 )
 
 
 #define UART0_IMSC_RX_BIT	1 << 4
