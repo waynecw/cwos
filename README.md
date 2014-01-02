@@ -27,6 +27,7 @@ Features
 
 * Relocation at boot time
 * IRQ handling
+* Virtual memory enablement
 * Basic UART driver
 * Partial C-style string library implementation
 * printk() support for debugging
