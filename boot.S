@@ -30,6 +30,7 @@ relocation_loop:
 	ble relocation_loop
 	ldr pc, =0
 
+
 setup_stack:
 	mrs r0, cpsr
 	/* enter IRQ mode */
@@ -39,7 +40,7 @@ setup_stack:
 	ldr sp, =irq_stack_start
 	/* enter SVC mode */
 	msr cpsr, r0
-	ldr sp, =kernel_stack_start
+	ldr sp, =0x3000  @ TODO: fix this workaround 
 	bl cwos_boot 
 
 _handler_irq:

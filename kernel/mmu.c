@@ -7,6 +7,7 @@ struct pginfo_t *free_pages;
 struct pginfo_t *pages;
 
 extern void cwos_main();
+extern uint32_t kernel_stack_start;
 
 phyaddr_t page2pa(struct pginfo_t *p) 
 {
@@ -87,6 +88,23 @@ pse_t *pgtable_walk(ttb_t *ttb, const void *va, int create)
 	return NULL;
 }
 
+
+static void pgtable_map_sections(ttb_t *ttb, void *va, size_t n, phyaddr_t pa, int ap)
+{
+	int i;
+
+	for (i = 0; i < n; i += 0x100000) {
+		uint32_t mva = (uint32_t) va + i;
+		uint32_t *sect_dtr;
+
+		mva = (mva & 0xFFF00000) >> 20;
+		mva <<= 2;
+		
+		sect_dtr = (uint32_t *) ((uint32_t) ttb & 0xFFFFFC00 | mva);
+		*sect_dtr = ((pa + i) & 0xFFF00000) | 0xC1E;
+	}
+}
+
 static void pgtable_map_region(ttb_t *ttb, void *va, size_t n, phyaddr_t pa, int ap) 
 {
 	int i;
@@ -94,7 +112,7 @@ static void pgtable_map_region(ttb_t *ttb, void *va, size_t n, phyaddr_t pa, int
 	for (i = 0; i < n; i += PAGE_SIZE) {
 		pse_t *pte = pgtable_walk(ttb, va+i, 1);
 
-		*pte = (pse_t) ((pa + i) & SP_ADDR_MASK | SP_INDICATOR);
+		*pte = (pse_t) ((pa + i) & SP_ADDR_MASK | SP_INDICATOR | 0xC); // 0xC: C/B 
 		*pte = SP_SET_AP(*pte, ap);
 	}
 }
@@ -106,13 +124,12 @@ static void pgtable_init(ttb_t *ttb, uint32_t npages)
 	pfe_t pfe;
 
 	/* map physical memory 128M to KERNEL_BASE */
-	pgtable_map_region(ttb, (void *) KERNEL_BASE, MEM_SIZE, 0, AP_PRIV);
+	pgtable_map_sections(ttb, (void *) KERNEL_BASE, MEM_SIZE, 0, AP_USER);
 
 	/* map IO memory region to IO_BASE */
-	pgtable_map_region(ttb, (void *) IO_BASE, IO_MEM_SIZE, IO_PHY_BASE, AP_PRIV);
 
 	/* map 0 to 0 */
-	pgtable_map_region(ttb, (void *) 0, PAGE_SIZE, 0, AP_PRIV);
+	pgtable_map_sections(ttb, (void *) 0x0, PAGE_SIZE * 10, 0, AP_USER);
 }
 
 static void page_init(int npages)
@@ -136,25 +153,30 @@ static void page_init(int npages)
 
 static void mmu_enable(ttb_t *ttb) 
 {
-	int dac = 0x1; /* enable domain 0 as Client mode */
+	unsigned int dac = 0xffffffff; /* enable domain 0 as Client mode */
 	void *new_pc = (void *)(cwos_main + KERNEL_BASE);
 
 	__asm__ __volatile__ (
+		"mov sp, %4\n"
+		"mov lr, %5\n"
 		"mcr p15, 0, %0, c2, c0, 0\n"  /* set TTB */
 		"mcr p15, 0, %1, c3, c0, 0\n"  /* set domain AP */
+		"mcr p15, 0, %2, c7, c7, 0\n"  /* invalidate D/I cache */
+		"mcr p15, 0, %3, c8, c7, 0\n"  /* invalidate TLB */
 		"mrc p15, 0, r1, c1, c0, 0\n"  /* ready to enable MMU */
 		"orr r1, #0x1\n"
 		"mcr p15, 0, r1, c1, c0, 0\n"
 		"nop\n"
 		"nop\n"
-		"nop\n"
-		"mov pc, %2\n"
+		"mov pc, lr\n"
 		: 
-		: "r"(ttb), "r"(dac), "r"(new_pc)
+//		: "r"(ttb), "r"(dac), "r"(0), "r"(0), "r"(KERNEL_BASE + kernel_stack_start), "r"(cwos_main)
+		: "r"(ttb), "r"(dac), "r"(0), "r"(0), "r"(0xC0003000), "r"(cwos_main + 0xC0000000)
 		: "r1", "r2"
 	);
 }
 
+#if 1
 void mmu_init()
 {
 	int i;
@@ -172,3 +194,6 @@ void mmu_init()
 	pgtable_init(ttb, npages);
 	mmu_enable(ttb);
 }
+#endif
+
+

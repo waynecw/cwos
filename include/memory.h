@@ -14,8 +14,8 @@
 #define TB_TABLE_INDEX(va) (((uint32_t) va >> TB_TBI_OFFSET) << 2)
 
 #define TB_FPT_ADDR(ttb, va) ({ \
-	uint32_t __ttb = (uint32_t) *ttb; \
-	__ttb & TB_TBI_MASK |  TB_TABLE_INDEX(va); \
+	uint32_t __ttb = (uint32_t) ttb; \
+	(__ttb & TB_TBI_MASK) |  TB_TABLE_INDEX(va); \
 })
 
 #define MVA_L2_OFFSET 12
