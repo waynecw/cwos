@@ -46,6 +46,7 @@ void vprintfmt(void (*putch)(const char), const char *fmt, va_list *va)
 	char ch;
 	unsigned long long num;
 	int base;
+	register const char *str;
 
 	while (1) {
 		ch = *(unsigned char *) fmt++;
@@ -71,6 +72,14 @@ void vprintfmt(void (*putch)(const char), const char *fmt, va_list *va)
 						num = getuint(va);
 						base = 16;
 						printnum(putch, num, base);
+						break;
+
+					case 's':
+						str = va_arg(*va, char *);
+						if (!str)
+							str = "(null)";
+						while (*str != '\0') 
+							putch(*str++);
 				}
 
 				break;
