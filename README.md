@@ -34,6 +34,13 @@ Features
 * Non-recursive Make design
 
 
+Memory Layout
+-------------
+
+* Kernel space (128M): `0xC0000000 ~ 0xC8000000` maps to `0 ~ 0x08000000`
+* IO space: `0xD0000000 ~ 0xD01F5000` maps to `0x10000000 ~ 0x101F5000`
+
+
 Install & Execute
 -----------------
 1.  Download Sourcery Codebench installer (2012.09-63) from [Mentor Graphic][1]
