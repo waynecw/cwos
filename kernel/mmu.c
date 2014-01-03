@@ -27,7 +27,7 @@ static void *boot_alloc(size_t n)
 
 	if (!nextfree) {
 		extern uint32_t irq_stack_start;
-		nextfree = (char *) &irq_stack_start;
+		nextfree = (char *) ((uint32_t) &irq_stack_start - VIRT_OFFSET);
 	}
 	
 	if (!n)
@@ -127,6 +127,7 @@ static void pgtable_init(ttb_t *ttb, uint32_t npages)
 	pgtable_map_sections(ttb, (void *) KERNEL_BASE, MEM_SIZE, 0, AP_USER);
 
 	/* map IO memory region to IO_BASE */
+	pgtable_map_sections(ttb, (void *) IO_BASE, IO_MEM_SIZE, IO_PHY_BASE, AP_USER);
 
 	/* map 0 to 0 */
 	pgtable_map_sections(ttb, (void *) 0x0, PAGE_SIZE * 10, 0, AP_USER);
@@ -170,8 +171,7 @@ static void mmu_enable(ttb_t *ttb)
 		"nop\n"
 		"mov pc, lr\n"
 		: 
-//		: "r"(ttb), "r"(dac), "r"(0), "r"(0), "r"(KERNEL_BASE + kernel_stack_start), "r"(cwos_main)
-		: "r"(ttb), "r"(dac), "r"(0), "r"(0), "r"(0xC0003000), "r"(cwos_main + 0xC0000000)
+		: "r"(ttb), "r"(dac), "r"(0), "r"(0), "r"(&kernel_stack_start), "r"(cwos_main)
 		: "r1", "r2"
 	);
 }
@@ -182,14 +182,10 @@ void mmu_init()
 	int i;
 	ttb_t* ttb;
 	uint32_t npages = MEM_SIZE / PAGE_SIZE; 
-
-	pages = boot_alloc(npages * sizeof(struct pginfo_t));
-	memset(pages, 0, npages * sizeof(struct pginfo_t));
-
-	page_init(npages);
+	extern uint32_t _ttb_start;
 	
 	/* ttb contains its own address */
-	ttb = (ttb_t *) ROUNDUP(&pages[npages-1], 0x4000);
+	ttb = (uint32_t *) ((uint32_t) &_ttb_start - VIRT_OFFSET);
 
 	pgtable_init(ttb, npages);
 	mmu_enable(ttb);

@@ -15,6 +15,11 @@ SECTIONS
 		_erodata = .;
 	}
 
+	. = ALIGN(0x4000);  /* TTB requires to align to 16K */
+	_ttb_start = .;
+	. += 0x4000;  /* TTB requires 16K memory */
+	_ettb_start = .;
+
 	.data : { 
 		_data = .;
 		*(.data) 

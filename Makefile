@@ -28,7 +28,7 @@ $(OS): $(OBJS)
 	$(CC) -o $@.elf -T $(LDSCRIPT) $(OBJS)
 	$(OBJDUMP) -D $@.elf > $@.asm
 	$(OBJCOPY) -O binary $@.elf $@.img
-	$(NM) $@.elf > $@.map
+	$(NM) $@.elf | sort > $@.map
 
 
 qemu: $(OS)

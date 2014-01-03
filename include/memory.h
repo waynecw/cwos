@@ -51,7 +51,8 @@
 
 /* 4KB small page */
 #define SMALL_PGSIZE 0x1000
-#define PAGE_SIZE SMALL_PGSIZE
+#define SECTION_PGSIZE 0x100000
+#define PAGE_SIZE SECTION_PGSIZE
 
 
 /* page table pointer definition */
@@ -76,11 +77,12 @@ void *page2kva(struct pginfo_t *p);
 
 
 /* memory layout */
-#define KERNEL_BASE 0xC0000000
-#define IO_BASE 0xD0000000
+#define VIRT_OFFSET 0xC0000000
+#define KERNEL_BASE VIRT_OFFSET
 
-#define IO_MEM_SIZE 0x001F5000
 #define IO_PHY_BASE 0x10000000
+#define IO_BASE (IO_PHY_BASE + VIRT_OFFSET)
+#define IO_MEM_SIZE 0x001F5000
 
 #define __iopa2va(iopa) (iopa + (IO_BASE - IO_PHY_BASE))
 
