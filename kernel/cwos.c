@@ -6,6 +6,10 @@
 void cwos_boot() 
 {
 	mmu_init();
+}
+
+void cwos_main()
+{
 	uart_init();
 
 	printk("Hello CWOS %d.%x World\n", 0, 0x1);
@@ -15,13 +19,4 @@ void cwos_boot()
 
 	while (1) {
 	}
-}
-
-void cwos_main()
-{
-	uart_init();
-
-	printk("Hello CWOS!!\n");
-
-	while (1);
 }

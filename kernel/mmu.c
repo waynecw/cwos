@@ -93,7 +93,7 @@ static void pgtable_map_sections(ttb_t *ttb, void *va, size_t n, phyaddr_t pa, i
 {
 	int i;
 
-	for (i = 0; i < n; i += 0x100000) {
+	for (i = 0; i < n; i += PAGE_SIZE) {
 		uint32_t mva = (uint32_t) va + i;
 		uint32_t *sect_dtr;
 

@@ -3,7 +3,7 @@
 #include <memory.h>
 
 //#define UART0_BASE		0x101F1000
-#define UART0_BASE  __iopa2va(0x101F1000)
+#define UART0_BASE  ( 0x101F1000 + VIRT_OFFSET)
 
 #define UART0_DR    ( UART0_BASE + 0x0 )
 #define UART0_RSR   ( UART0_BASE + 0x4 )

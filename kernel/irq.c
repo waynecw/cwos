@@ -1,6 +1,7 @@
 #include <irq.h>
 #include <uart.h>
 #include <types.h>
+#include <memory.h>
 
 void (*pl190_isr_vectors[IRQ_COUNT])(void) = 
 {
@@ -8,7 +9,6 @@ void (*pl190_isr_vectors[IRQ_COUNT])(void) =
 	uart0_irq_handler,
 	0, 0, 0
 };
-
 
 void irq_enable()
 {
