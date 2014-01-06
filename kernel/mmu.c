@@ -124,13 +124,13 @@ static void pgtable_init(ttb_t *ttb, uint32_t npages)
 	pfe_t pfe;
 
 	/* map physical memory 128M to KERNEL_BASE */
-	pgtable_map_sections(ttb, (void *) KERNEL_BASE, MEM_SIZE, 0, AP_USER);
+	pgtable_map_sections(ttb, (void *) KERNEL_BASE, MEM_SIZE, 0, AP_USER_RDONLY);
 
 	/* map IO memory region to IO_BASE */
 	pgtable_map_sections(ttb, (void *) IO_BASE, IO_MEM_SIZE, IO_PHY_BASE, AP_USER);
 
 	/* map 0 to 0 */
-	pgtable_map_sections(ttb, (void *) 0x0, PAGE_SIZE * 10, 0, AP_USER);
+	pgtable_map_sections(ttb, (void *) 0x0, PAGE_SIZE * 10, 0, AP_PRIV);
 }
 
 static void page_init(int npages)
@@ -154,7 +154,7 @@ static void page_init(int npages)
 
 static void mmu_enable(ttb_t *ttb) 
 {
-	unsigned int dac = 0xffffffff; /* enable domain 0 as Client mode */
+	unsigned int dac = 0x1; /* enable domain 0 as Client mode */
 	void *new_pc = (void *)(cwos_main + KERNEL_BASE);
 
 	__asm__ __volatile__ (
