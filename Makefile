@@ -23,6 +23,7 @@ OBJS := boot.o
 
 include device/build.mk
 include kernel/build.mk
+include lib/build.mk
 
 $(OS): $(OBJS)
 	$(CC) -o $@.elf -T $(LDSCRIPT) $(OBJS)
