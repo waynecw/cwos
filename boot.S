@@ -45,28 +45,8 @@ setup_stack:
 
 _handler_irq:
 	/* obtain return address in IRQ mode */
-	sub lr, lr, #4 
-
-	push {r0-r1}		
-	mov r0, lr			
-	mrs r1, cpsr	
-	bic r1, #0x1F
-	orr r1, #0x13		
-	msr cpsr, r1
-
-	/* enter SVC mode */
-	push {r0}	
-	bic r1, #0x1
-	msr cpsr, r1	
-
-	/* enter IRQ mode */
-	pop {r0-r1}			
-	push {r0-r4, r12}
-	bl handler_irq		
-	pop {r0-r4, r12}
-	mrs lr, spsr
-
-	/* enter SVC mode */
-	msr cpsr, lr		
+	push {lr}
+	bl handler_irq
 	pop {lr}
-	mov pc, lr
+	subs pc, lr, #4
+

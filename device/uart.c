@@ -16,12 +16,18 @@
 #define UART0_TMIS  ( UART0_BASE + 0x40 )
 #define UART0_ICR   ( UART0_BASE + 0x44 )
 
-
 #define UART0_IMSC_RX_BIT	1 << 4
+
+#define BUFFER_SIZE 128
+static char recv_buffer[BUFFER_SIZE] = {0};
+static unsigned int ri;
+static unsigned int wi;
 
 void uart_init()
 {
 	volatile unsigned int *reg = 0;
+	ri = 0;
+	wi = 0;
 
 	/* set baud rate to 115200 */
 	reg = (volatile unsigned int *) UART0_IBRD;
@@ -48,11 +54,15 @@ void uart_init()
 
 static void uart0_recv()
 {
-	volatile char *reg_dr = (volatile char *) UART0_DR;
-	char c[2];
-	c[0] = *reg_dr;
+	volatile char *c = (volatile char *) UART0_DR;
+//	char echo[2];
 
-	uart0_send(c);
+	recv_buffer[wi++] = *c;
+	if (wi > BUFFER_SIZE)
+		wi = 0;
+
+//	echo[0] = *c;
+//	uart0_send(echo);
 }
 
 void uart0_irq_handler()
@@ -86,4 +96,17 @@ void uart0_putchar(const char c)
 	while (*reg_fr & 0x2);
 	*((volatile char *) UART0_DR) = c;
 	while (*reg_fr & 0x2);
+}
+
+void uart0_getchar(char *c)
+{
+	if (ri == wi) {
+		*c = '\0';
+		return;
+	}
+
+	*c = recv_buffer[ri++];
+
+	if (ri > BUFFER_SIZE) 
+		ri = 0;
 }
