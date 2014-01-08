@@ -17,6 +17,5 @@ void cwos_main()
 
 	irq_enable();
 
-	while (1) {
-	}
+	cwshell();
 }
