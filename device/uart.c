@@ -18,6 +18,8 @@
 
 #define UART0_IMSC_RX_BIT	1 << 4
 
+#define UART_IRQ 12
+
 #define BUFFER_SIZE 128
 static char recv_buffer[BUFFER_SIZE] = {0};
 static unsigned int ri;
@@ -26,6 +28,8 @@ static unsigned int wi;
 void uart_init()
 {
 	volatile unsigned int *reg = 0;
+	request_irq(UART_IRQ, uart0_irq_handler, NULL);
+
 	ri = 0;
 	wi = 0;
 
