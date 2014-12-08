@@ -155,7 +155,6 @@ static void page_init(int npages)
 static void mmu_enable(ttb_t *ttb) 
 {
 	unsigned int dac = 0x1; /* enable domain 0 as Client mode */
-	void *new_pc = (void *)(cwos_main + KERNEL_BASE);
 
 	__asm__ __volatile__ (
 		"mov sp, %4\n"
