@@ -20,6 +20,7 @@
 
 void irq_enable();
 void irq_disable();
+void request_irq(int, void (*)(void), void *);
 
 void handler_swi();
 

@@ -75,6 +75,7 @@ enum {
 phyaddr_t page2pa(struct pginfo_t *p);
 void *page2kva(struct pginfo_t *p);
 
+void mmu_init(void);
 
 /* memory layout */
 #define VIRT_OFFSET 0xC0000000

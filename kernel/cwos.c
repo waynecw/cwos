@@ -3,6 +3,8 @@
 #include <printk.h>
 #include <memory.h>
 
+extern void cwshell();
+
 void cwos_boot() 
 {
 	mmu_init();
