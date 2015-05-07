@@ -22,38 +22,38 @@
 
 #define BUFFER_SIZE 128
 static char recv_buffer[BUFFER_SIZE] = {0};
-static unsigned int ri;
-static unsigned int wi;
+static uint32_t ri;
+static uint32_t wi;
 
 void uart_init()
 {
-	volatile unsigned int *reg = 0;
+	volatile uint32_t *reg = 0;
 	request_irq(UART_IRQ, uart0_irq_handler, NULL);
 
 	ri = 0;
 	wi = 0;
 
 	/* set baud rate to 115200 */
-	reg = (volatile unsigned int *) UART0_IBRD;
+	reg = (volatile uint32_t *) UART0_IBRD;
 	*reg = 0x11;
 
-	reg = (volatile unsigned int *) UART0_FBRD;
+	reg = (volatile uint32_t *) UART0_FBRD;
 	*reg = 0x17;
 
 	/* set 8n1: data bit:8, no parity bit, 1 stop bit */
-	reg = (volatile unsigned int *) UART0_LCR_H;
+	reg = (volatile uint32_t *) UART0_LCR_H;
 	*reg = 0x60;
 
 	/* enable UART0 interrupt on VIC  */
-	reg = (volatile unsigned int *) PIC_INT_ENABLE;
+	reg = (volatile uint32_t *) PIC_INT_ENABLE;
 	*reg |= PIC_UART0_BIT;
 
 	/* enable UART0 RX interrupt on PL011 */
-	reg = (volatile unsigned int *) UART0_IMSC;
+	reg = (volatile uint32_t *) UART0_IMSC;
 	*reg |= UART0_IMSC_RX_BIT;
 
 	/* check if interrupts are enabled */
-	//reg = (volatile unsigned int *) UART0_TMIS;
+	//reg = (volatile uint32_t *) UART0_TMIS;
 }
 
 static void uart0_recv()
@@ -71,31 +71,31 @@ static void uart0_recv()
 
 void uart0_irq_handler()
 {
-	volatile unsigned int *reg_ris = (unsigned int *) UART0_RIS;
+	volatile uint32_t *reg_ris = (uint32_t *) UART0_RIS;
 
 	/* RX */
 	if (*reg_ris & 0x10) {
 		/* clear IRQ bit */
-		*((volatile unsigned int *) UART0_ICR) = 0x10;
+		*((volatile uint32_t *) UART0_ICR) = 0x10;
 		uart0_recv();
 	}
 }
 
 void uart0_send(const char *str)
 {
-	volatile unsigned char *reg_dr = (volatile unsigned char *) UART0_DR;
-	volatile unsigned char *reg_fr = (volatile unsigned char *) UART0_FR;
+	volatile uint8_t *reg_dr = (volatile uint8_t *) UART0_DR;
+	volatile uint8_t *reg_fr = (volatile uint8_t *) UART0_FR;
 
 	while (*str != '\0') {
 		while (*reg_fr & 0x2);
-		*reg_dr = (unsigned char)(*str);
+		*reg_dr = (uint8_t)(*str);
 		str++;
 	}
 }
 
 void uart0_putchar(const char c)
 {
-	volatile unsigned char *reg_fr = (volatile unsigned char *) UART0_FR;
+	volatile uint8_t *reg_fr = (volatile uint8_t *) UART0_FR;
 
 	while (*reg_fr & 0x2);
 	*((volatile char *) UART0_DR) = c;
