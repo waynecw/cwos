@@ -6,7 +6,7 @@
 #define IRQ_COUNT		32
 
 #define VIC_BASE		0x10140000
-#define PIC_BASE		( VIC_BASE + VIRT_OFFSET )
+#define PIC_BASE		VIC_BASE
 #define PIC_IRQ_STATUS		( PIC_BASE + 0 )
 #define PIC_INT_ENABLE		( PIC_BASE + 0x10 )
 
