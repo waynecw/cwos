@@ -11,7 +11,7 @@ TARGET := versatilepb
 
 OS := cwos
 
-CFLAGS := -nostdinc -mcpu=arm926ej-s -g -Iinclude -fno-builtin
+CFLAGS := -nostdinc -mcpu=arm926ej-s -g -Iinclude -fno-builtin #-Wall
 ASFLAGS := -mcpu=arm926ej-s -g 
 
 LDSCRIPT := cwos.ld

@@ -4,6 +4,7 @@
 void uart_init();
 void uart0_send(const char *str);
 void uart0_putchar(const char c);
+void uart0_getchar(char *);
 
 void uart0_irq_handler();
 

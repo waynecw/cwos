@@ -3,12 +3,7 @@
 #include <types.h>
 #include <memory.h>
 
-void (*pl190_isr_vectors[IRQ_COUNT])(void) = 
-{
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	uart0_irq_handler,
-	0, 0, 0
-};
+static void (*irq_vectors[IRQ_COUNT])(void);
 
 void irq_enable()
 {
@@ -34,14 +29,19 @@ void handler_swi()
 	irq_enable();
 }
 
+void request_irq(int irqno, void (*func)(void), void *flag) 
+{
+	irq_vectors[irqno] = func;
+}
+
 void handler_irq()
 {
 	uint32_t reg_irq_status = *((volatile uint32_t *) PIC_IRQ_STATUS);
-	int irq_n = 0;
+	int irqno = 0;
 
-	while (reg_irq_status >>= 1) 
-		irq_n++;
-
-	pl190_isr_vectors[irq_n]();
-
+	do {
+		if (reg_irq_status & 1) 
+			irq_vectors[irqno]();
+		irqno++;
+	} while (reg_irq_status >>= 1);
 }
