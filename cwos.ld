@@ -1,7 +1,7 @@
 ENTRY(_start)
 SECTIONS
 {
-	. = 0xC0000000;  /* QEMU versatilepb start address */
+	. = 0x00000000;  /* QEMU versatilepb start address */
 	.text : { 
 		_text = .;
 		boot.o (interrupt_vector)

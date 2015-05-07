@@ -77,7 +77,8 @@ void *page2kva(struct pginfo_t *p);
 
 
 /* memory layout */
-#define VIRT_OFFSET 0xC0000000
+//#define VIRT_OFFSET 0xC0000000
+#define VIRT_OFFSET 0
 #define KERNEL_BASE VIRT_OFFSET
 
 #define IO_PHY_BASE 0x10000000

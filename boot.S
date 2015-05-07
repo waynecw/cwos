@@ -40,7 +40,7 @@ setup_stack:
 	ldr sp, =irq_stack_start
 	/* enter SVC mode */
 	msr cpsr, r0
-	ldr sp, =0x3000  @ TODO: fix this workaround 
+	ldr sp, =kernel_stack_start
 	bl cwos_boot 
 
 _handler_irq:
