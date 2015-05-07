@@ -17,7 +17,7 @@ Environment
   - Verified host OS
       * Ubuntu 14.04 x64
   - QEMU emulator
-      * Ubuntu default build
+      * Ubuntu default build `qemu-system-arm`
   - Cross compile toolchain
       * Ubuntu package `gcc-arm-none-eabi`
 
@@ -41,7 +41,7 @@ Memory Layout
 
 Install & Execute
 -----------------
-1.  Download toolchain `apt-get install gcc-arm-none-eabi` in Ubuntu.
+1.  Download qemu and toolchain `apt-get install qemu-system-arm gcc-arm-none-eabi` in Ubuntu.
 2.  `git clone https://github.com/waynecw/cwos .` to retreive source code
 3.  `cd cwos; make`
 4.  `make qemu` to execute CWOS in QEMU
